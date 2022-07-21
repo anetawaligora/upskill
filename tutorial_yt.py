@@ -34,4 +34,32 @@ print(message.find('ello'))
 print(dir(message))
 
 # Episode 3 Variables - Integers and Floats
+num = 10.0
+print(type(num))
 
+# Arthimetric operators
+addition = 3 + 2
+substraction = 10 - 8
+multiplications = 2 * 3
+division = 9 / 4
+floor_division = 9 // 4
+exponent = 3 ** 2
+modulus = 4 % 3
+
+print(3 ** 2)
+print(addition)
+print(substraction)
+print(multiplications)
+print(division)
+print(floor_division)
+print(exponent)
+print(modulus)
+
+print(abs(-5))
+print(round(4.26))
+print(round(4.51))
+
+# Equal
+print(addition == exponent)
+
+# Episode 4 - Lists, Tuples, Sets
