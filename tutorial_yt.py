@@ -63,3 +63,84 @@ print(round(4.51))
 print(addition == exponent)
 
 # Episode 4 - Lists, Tuples, Sets
+# List = []
+# Tuples = ()
+# Dict = {}
+# Lists (mutable)
+courses = ['history', 'maths', 'geography']
+print(courses)
+print(len(courses))
+print(courses[0])
+print(courses[0:3])
+
+# Adding item in the end of lists
+courses.append('Biology')
+print(courses)
+
+# Adding item in choosen place of the lists
+courses.insert(1, 'PE')
+print(courses)
+
+courses_2 = ['English', 'Polish']
+# courses.insert(1, courses_2)
+# print(courses)
+
+# extend
+courses.extend(courses_2)
+print(courses)
+
+# pop - remove item from list
+courses.pop(2)
+print(courses)
+
+# sort
+courses.sort()
+print(courses)
+
+num = [4, 6, 3, 0, 2]
+num.sort()
+print(num)
+num.sort(reverse=True)
+print(num)
+print(min(num))
+print(sum(num))
+
+for item in courses:
+    print(item)
+
+for index, item in enumerate(courses):
+    print(index, item)
+
+course_str = '-'.join(courses)
+print(course_str)
+
+# Tuples - immutable
+tuple_1 = ('apple', 'banana', 'pear', 'orange')
+print(tuple_1)
+
+# Sets
+set = {'carrot', 'cucumber', 'tomato'}
+print(set)
+
+sciences = {'maths', 'physics'}
+art = {'history', 'maths'}
+
+print(sciences.intersection(art))
+
+# Episode 5 - Dictionaries
+student = {'name': 'Aneta', 'age': 28, 'courses': ['maths', 'geography', 'English']}
+print(student)
+print(student['courses'])
+print(student.get('name'))
+
+student.update({'name': 'Marcin'})
+print(student)
+del student['age']
+print(student)
+
+print(student.keys())
+
+for key in student:
+    print(key)
+
+# Episode 6 Conditionals and Booleans - If, Else, and Elif Statements
