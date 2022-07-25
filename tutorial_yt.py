@@ -144,3 +144,102 @@ for key in student:
     print(key)
 
 # Episode 6 Conditionals and Booleans - If, Else, and Elif Statements
+
+# if False:
+#   print('Conditionals are true')
+
+language = 'python'
+if language != 'python':
+    print('Conditional is true')
+elif language == 'Java':
+    print('not true')
+else:
+    print('Not match')
+
+user = 'Admin'
+logged_in = True
+if user or logged_in:
+    print('Approved')
+else:
+    print('Bad cred')
+
+# False
+# none
+# False
+# zero of any numeric type
+# Any  empty sequence eg. () [] ''
+# Ane empty mapping eg {}
+
+
+# The same values but two different objects
+a = [1, 2, 3]
+b = [1, 2, 3]
+print(a is b)
+
+condition = ''
+if condition:
+    print("Confition is True")
+else:
+    print("Condition is False")
+
+# Episode 7 Loops and iterations For/While loops
+
+nums = [1, 2, 3, 4]
+
+for num in nums:
+    if num == 3:
+        print('Found!')
+        break
+    print(num)
+
+for num in nums:
+    if num == 3:
+        print('Found!')
+        continue
+    print(num)
+
+for num in nums:
+    for letter in 'abcd':
+        print(num, letter)
+
+for i in range(11):
+    print(i)
+
+
+# x = 0
+# while x < 10:
+#    if x == 5:
+#        break
+#    print(x)
+#    #x += 1
+
+# while True:
+#    print(x)
+#    x += 1
+
+# Episode 8 Functions
+def hello_func():
+    print('hello')
+
+
+def greetings():
+    print("Greetings from Poland!")
+
+
+def personal_greeting(name, wishes):
+    print("Welcome" + '  ' + name + ". Nice to meet you " + wishes)
+
+
+greetings()
+personal_greeting("Aneta", "girl")
+
+
+# def sum():
+#    print("sum=")
+
+
+#def items(summant_1, summant_2):
+    #print("sum=" + ' ' + summant_1 + summant_2)
+
+
+#items(3, 2)
