@@ -238,6 +238,15 @@ def items(summant_1, summant_2):
     print("sum=" + ' ' + str(summant_1 + summant_2))
 
 
+# Better option
+def add_and_print(a, b):
+    print("sum: " + str(a + b) + " made by adding " + str(a) + " and " + str(b))
+    print(f'sum: {a + b} made by adding {a} and {b}')
+    print('sum: {} made by adding {} and {}'.format(a + b, a, b))
+
+
+add_and_print(2, 3)
+
 items(3, 2)
 
 
@@ -287,4 +296,4 @@ print(days_in_month(2020, 12))
 print(is_leap(2020))
 print(is_leap(2022))
 
-#Episode 9 Import Modules and Exploring the Standard Library
+# Episode 9 Import Modules and Exploring the Standard Library
