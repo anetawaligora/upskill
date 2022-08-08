@@ -24,3 +24,15 @@ with open("data/participants1.json") as jsonFile:
 
 print(jsonObject)
 print(random.choice(jsonObject))
+
+#I need to import csv file participants2.csv
+#I need to draw winings considering the weights
+#The grates weight should be drawing the greates number of times
+
+with open("data/participants2.csv") as csvfile:
+    participants2_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    participants = list(participants2_reader)[1:]
+print(participants)
+
+import numpy as np
+
