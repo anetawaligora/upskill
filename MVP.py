@@ -41,7 +41,14 @@ elif selection == "No":
 # I need to draw winings considering the weights
 # The grates weight should be drawing the greates number of times
 
-# with open("data/participants2.csv") as csvfile:
-#    participants2_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-#    participants = list(participants2_reader)[1:]
-# print(participants)
+with open("data/participants2.csv") as csvfile:
+    participants_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    participants = list(participants_reader)[1:]
+    weights = [int(participant[3]) for participant in participants]
+    print(weights)
+
+print("How many draws you want?")
+winner = int(input())
+resume = (random.choices(participants, weights=weights, k=winner))
+print(resume)
+
