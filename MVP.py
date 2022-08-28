@@ -1,54 +1,66 @@
-# I need to import/load csv file participatnts1 - in this file are participants data without weighted
-# I need to draw winnings
-# I need to input data with count of participants
-
+# python mvp.pyFILES = {}
+# wczytać zawartość plików do FILES should_draw = Truewhile should_draw:
+# pytanie - czy losować czy zakończyć program
+# pytanie - ilu zwycięzców
+# pytanie - który plik użyć (wyświetlić listę plików <opcje>)
+# użytkowenik wybiera plik, w zależności od tego używamy funkcji losującej
+# losowanie wygranych
+# wyświtlić zwycięzców
 
 import csv
 import random
-import string
-
-with open("data/participants1.csv") as csvfile:
-    participants_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-    participants = list(participants_reader)[1:]
-print(participants)
-print(random.choice(participants))
-
-# I need to import json file participant1.json - in this file are participants data in json format without weighted
-# I need to draw winnings
-# User should be able to add input with number of draws
-# User should be able to chose if he wants to continue the draw
-
 import json
 
-with open("data/participants1.json") as jsonFile:
-    jsonObject = json.load(jsonFile)
-    jsonFile.close()
 
-print(jsonObject)
-print("How many times to make a draw?")
-x = int(input())
-drawings = (random.choices(jsonObject, k=x))
-drawing = (random.choice(jsonObject))
+def draw_from_json(file, draw_counter):
+    participants = json.load(file)
+    return random.choices(participants, k=draw_counter)
 
-print(drawings)
-selection = input("Do you want to continue to draw winners? Answer Yes or No ")
-if selection == "Yes":
-    print(drawing)
-elif selection == "No":
-    print("End of draw")
 
-# I need to import csv file participants2.csv
-# I need to draw winings considering the weights
-# The grates weight should be drawing the greates number of times
+def draw_from_json_weighted(file, draw_counter):
+    return None
 
-with open("data/participants2.csv") as csvfile:
-    participants_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+
+def draw_from_csv(file, draw_counter):
+    participants_reader = csv.reader(file, delimiter=',', quotechar='|')
+    participants = list(participants_reader)[1:]
+    return random.choices(participants, k=draw_counter)
+
+
+def draw_from_csv_weighted(file, draw_counter):
+    participants_reader = csv.reader(file, delimiter=',', quotechar='|')
     participants = list(participants_reader)[1:]
     weights = [int(participant[3]) for participant in participants]
-    print(weights)
+    return random.choices(participants, k=draw_counter, weights=weights)
 
-print("How many draws you want?")
-winner = int(input())
-resume = (random.choices(participants, weights=weights, k=winner))
-print(resume)
 
+def draw():
+    filename = input("Please provide filename with data:")
+    with_weights = input("Do exist weights in loaded file? y/n")
+    draw_counter = int(input("How many times to make a draw?"))
+
+    with open(filename) as file:
+        if filename.endswith('.json'):
+            if with_weights == 'y':
+                drawings = draw_from_json_weighted(file, draw_counter)
+            else:
+                drawings = draw_from_json(file, draw_counter)
+        elif filename.endswith('.csv'):
+            if with_weights == 'y':
+                drawings = draw_from_csv(file, draw_counter)
+            else:
+                drawings = draw_from_csv_weighted(file, draw_counter)
+
+        file.close()
+
+    print(drawings)
+
+
+choice = "YES"
+
+while choice.upper() == "YES":
+    draw()
+    choice = input("Do you want to continue to draw winners? Answer Yes or No ")
+
+print("End of drawing")
+exit(0)
