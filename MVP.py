@@ -1,11 +1,12 @@
 # python mvp.pyFILES = {}
-# wczytać zawartość plików do FILES should_draw = Truewhile should_draw:
-# pytanie - czy losować czy zakończyć program
-# pytanie - ilu zwycięzców
-# pytanie - który plik użyć (wyświetlić listę plików <opcje>)
-# użytkowenik wybiera plik, w zależności od tego używamy funkcji losującej
-# losowanie wygranych
-# wyświtlić zwycięzców
+# load the contents of files into FILES should_draw = Truewhile should_draw:
+# question - from which file to draw
+# question - if there are weights in the file
+# question - how many times to make a draw
+# Winners drawing
+# Print the list of winners
+# question - whether to continue draw or end the program
+# if continue to draw --> choose a file and repeat steps , if end program print "End of drawing"
 
 import csv
 import random
@@ -18,7 +19,11 @@ def draw_from_json(file, draw_counter):
 
 
 def draw_from_json_weighted(file, draw_counter):
-    return None
+    participants = json.load(file)
+    participants = list(participants)
+    weights = [int(participant['weight']) for participant in participants]
+    return random.choices(participants, k=draw_counter, weights=weights)
+
 
 
 def draw_from_csv(file, draw_counter):
