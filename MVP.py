@@ -11,6 +11,7 @@
 import csv
 import random
 import json
+import os
 
 
 def draw_from_json(file, draw_counter):
@@ -23,7 +24,6 @@ def draw_from_json_weighted(file, draw_counter):
     participants = list(participants)
     weights = [int(participant['weight']) for participant in participants]
     return random.choices(participants, k=draw_counter, weights=weights)
-
 
 
 def draw_from_csv(file, draw_counter):
@@ -39,22 +39,33 @@ def draw_from_csv_weighted(file, draw_counter):
     return random.choices(participants, k=draw_counter, weights=weights)
 
 
+def show_available_input_files():
+    root_folder = os.getcwd()
+    data_folder = root_folder + '\data\inputs'
+    print('Available files: ' + ' '.join(os.listdir(data_folder)))
+
+
 def draw():
+    show_available_input_files()
+    input_files_directory = os.getcwd() + '\data\inputs'
     filename = input("Please provide filename with data:")
     with_weights = input("Do exist weights in loaded file? y/n")
     draw_counter = int(input("How many times to make a draw?"))
 
-    with open(filename) as file:
-        if filename.endswith('.json'):
+    file_path = os.path.join(input_files_directory, filename)
+    print(file_path)
+
+    with open(file_path) as file:
+        if file_path.endswith('.json'):
             if with_weights == 'y':
                 drawings = draw_from_json_weighted(file, draw_counter)
             else:
                 drawings = draw_from_json(file, draw_counter)
-        elif filename.endswith('.csv'):
+        elif file_path.endswith('.csv'):
             if with_weights == 'y':
-                drawings = draw_from_csv(file, draw_counter)
-            else:
                 drawings = draw_from_csv_weighted(file, draw_counter)
+            else:
+                drawings = draw_from_csv(file, draw_counter)
 
         file.close()
 
