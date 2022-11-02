@@ -11,7 +11,7 @@
 import csv
 import random
 import json
-import os
+from pathlib import Path
 
 
 def draw_from_json(file, draw_counter):
@@ -39,37 +39,50 @@ def draw_from_csv_weighted(file, draw_counter):
     return random.choices(participants, k=draw_counter, weights=weights)
 
 
-def show_available_input_files():
-    root_folder = os.getcwd()
-    data_folder = root_folder + '\data\inputs'
-    print('Available files: ' + ' '.join(os.listdir(data_folder)))
+def show_available_input_files(input_file_list):
+    print('Please choose the index of available files:')
+
+    for index, filepath in enumerate(input_file_list):
+        print(f"({index + 1}) : {filepath.name}")
+
+
+def show_winners_list_from_csv(drawings):
+    for index, item in enumerate(drawings):
+        print(f"{index + 1}. {item[1]} {item[2]}")
+
+
+def show_winners_list_from_json(drawings):
+    for index, item in enumerate(drawings):
+        print(f"{index + 1}. {item['first_name']} {item['last_name']}")
 
 
 def draw():
-    show_available_input_files()
-    input_files_directory = os.getcwd() + '\data\inputs'
-    filename = input("Please provide filename with data:")
+    input_files_directory = Path.joinpath(Path().absolute(), 'data/inputs')
+    input_file_list = list(input_files_directory.iterdir())
+    show_available_input_files(input_file_list)
+
+    index_for_filename = input("Please provide index of file with data:")
     with_weights = input("Do exist weights in loaded file? y/n")
     draw_counter = int(input("How many times to make a draw?"))
 
-    file_path = os.path.join(input_files_directory, filename)
-    print(file_path)
+    file_path = input_file_list[int(index_for_filename) - 1]
+    print(f"Chosen file: {file_path}")
 
     with open(file_path) as file:
-        if file_path.endswith('.json'):
+        if file_path.name.endswith('.json'):
             if with_weights == 'y':
                 drawings = draw_from_json_weighted(file, draw_counter)
             else:
                 drawings = draw_from_json(file, draw_counter)
-        elif file_path.endswith('.csv'):
+            show_winners_list_from_json(drawings)
+        elif file_path.name.endswith('.csv'):
             if with_weights == 'y':
                 drawings = draw_from_csv_weighted(file, draw_counter)
             else:
                 drawings = draw_from_csv(file, draw_counter)
+            show_winners_list_from_csv(drawings)
 
         file.close()
-
-    print(drawings)
 
 
 choice = "YES"
