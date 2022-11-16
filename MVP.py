@@ -8,88 +8,23 @@
 # question - whether to continue draw or end the program
 # if continue to draw --> choose a file and repeat steps , if end program print "End of drawing"
 
-import csv
-import random
-import json
-from pathlib import Path
-
-
-def draw_from_json(file, draw_counter):
-    participants = json.load(file)
-    return random.choices(participants, k=draw_counter)
-
-
-def draw_from_json_weighted(file, draw_counter):
-    participants = json.load(file)
-    participants = list(participants)
-    weights = [int(participant['weight']) for participant in participants]
-    return random.choices(participants, k=draw_counter, weights=weights)
-
-
-def draw_from_csv(file, draw_counter):
-    participants_reader = csv.reader(file, delimiter=',', quotechar='|')
-    participants = list(participants_reader)[1:]
-    return random.choices(participants, k=draw_counter)
-
-
-def draw_from_csv_weighted(file, draw_counter):
-    participants_reader = csv.reader(file, delimiter=',', quotechar='|')
-    participants = list(participants_reader)[1:]
-    weights = [int(participant[3]) for participant in participants]
-    return random.choices(participants, k=draw_counter, weights=weights)
-
-
-def show_available_input_files(input_file_list):
-    print('Please choose the index of available files:')
-
-    for index, filepath in enumerate(input_file_list):
-        print(f"({index + 1}) : {filepath.name}")
-
-
-def show_winners_list_from_csv(drawings):
-    for index, item in enumerate(drawings):
-        print(f"{index + 1}. {item[1]} {item[2]}")
-
-
-def show_winners_list_from_json(drawings):
-    for index, item in enumerate(drawings):
-        print(f"{index + 1}. {item['first_name']} {item['last_name']}")
+import interface
+from participants_drawings_manager import ParticipantsDrawManager
 
 
 def draw():
-    input_files_directory = Path.joinpath(Path().absolute(), 'data/inputs')
-    input_file_list = list(input_files_directory.iterdir())
-    show_available_input_files(input_file_list)
+    file_path, with_weights, draw_counter = interface.initialize_drawings()
 
-    index_for_filename = input("Please provide index of file with data:")
-    with_weights = input("Do exist weights in loaded file? y/n")
-    draw_counter = int(input("How many times to make a draw?"))
-
-    file_path = input_file_list[int(index_for_filename) - 1]
-    print(f"Chosen file: {file_path}")
-
-    with open(file_path) as file:
-        if file_path.name.endswith('.json'):
-            if with_weights == 'y':
-                drawings = draw_from_json_weighted(file, draw_counter)
-            else:
-                drawings = draw_from_json(file, draw_counter)
-            show_winners_list_from_json(drawings)
-        elif file_path.name.endswith('.csv'):
-            if with_weights == 'y':
-                drawings = draw_from_csv_weighted(file, draw_counter)
-            else:
-                drawings = draw_from_csv(file, draw_counter)
-            show_winners_list_from_csv(drawings)
-
-        file.close()
+    with ParticipantsDrawManager(file_path, with_weights, draw_counter) as drawings:
+        interface.show_winners(drawings, file_path)
 
 
-choice = "YES"
+if __name__ == '__main__':
+    choice = "YES"
 
-while choice.upper() == "YES":
-    draw()
-    choice = input("Do you want to continue to draw winners? Answer Yes or No ")
+    while choice.upper() == "YES":
+        draw()
+        choice = input("Do you want to continue to draw winners? Answer Yes or No ")
 
-print("End of drawing")
-exit(0)
+    print("End of drawing")
+    exit(0)
