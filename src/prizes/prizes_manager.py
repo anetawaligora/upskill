@@ -1,4 +1,8 @@
-import data_parser as parser
+import sys
+
+sys.path.append("..")
+
+from parsers import data_parser
 
 
 class PrizeManager(object):
@@ -6,7 +10,7 @@ class PrizeManager(object):
         self.file_obj = open(file_path)
 
     def __enter__(self):
-        parsed_json = parser.parse_json(self.file_obj)
+        parsed_json = data_parser.parse_json(self.file_obj)
 
         return parsed_json['prizes']
 

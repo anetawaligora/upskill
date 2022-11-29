@@ -1,5 +1,9 @@
-import draw
-import data_parser as parser
+import sys
+
+sys.path.append("..")
+
+from draw import draw
+from parsers import data_parser
 
 
 class ParticipantsDrawManager(object):
@@ -12,18 +16,18 @@ class ParticipantsDrawManager(object):
     def __enter__(self):
         if self.file_path.name.endswith('.json'):
             if self.with_weights == 'y':
-                participants = parser.parse_json_weighted(self.file_obj)
+                participants = data_parser.parse_json_weighted(self.file_obj)
                 drawings = draw.draw_from_json_weighted(participants, self.draw_counter)
             else:
-                participants = parser.parse_json(self.file_obj)
+                participants = data_parser.parse_json(self.file_obj)
                 drawings = draw.draw_from_json(participants, self.draw_counter)
 
         elif self.file_path.name.endswith('.csv'):
             if self.with_weights == 'y':
-                participants = parser.parse_csv_weighted(self.file_obj)
+                participants = data_parser.parse_csv_weighted(self.file_obj)
                 drawings = draw.draw_from_csv_weighted(participants, self.draw_counter)
             else:
-                participants = parser.parse_csv(self.file_obj)
+                participants = data_parser.parse_csv(self.file_obj)
                 drawings = draw.draw_from_csv(participants, self.draw_counter)
 
         return drawings

@@ -19,7 +19,3 @@ def parse_csv(file):
 def parse_csv_weighted(file):
     participants_reader = csv.reader(file, delimiter=',', quotechar='|')
     return list(participants_reader)[1:]
-
-#def parse_json_prizes(file):
-#    prizes = json.load(file)
-#    return list(prizes)

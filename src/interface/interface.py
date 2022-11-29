@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def initialize_drawings():
-    input_files_directory = Path.joinpath(Path().absolute(), 'data/inputs')
+    input_files_directory = Path.joinpath(Path().absolute(), 'src/data/inputs')
     input_file_list = list(input_files_directory.iterdir())
     show_available_input_files(input_file_list)
 

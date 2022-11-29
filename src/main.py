@@ -8,18 +8,17 @@
 # question - whether to continue draw or end the program
 # if continue to draw --> choose a file and repeat steps , if end program print "End of drawing"
 
-import interface
-from lottery_templates import get_separate_prizes_template
-from participants_drawings_manager import ParticipantsDrawManager
-from prize_manager import PrizeManager
+
+from draw import participants_drawings_manager
+from interface import interface
+from prizes import prizes_manager, prizes_templates
 
 
 def draw():
-    p = get_separate_prizes_template()
-    print(p)
     file_path, with_weights, draw_counter = interface.initialize_drawings()
-    with ParticipantsDrawManager(file_path, with_weights, draw_counter) as drawings, PrizeManager(
-            get_separate_prizes_template()) as prizes:
+    with participants_drawings_manager.ParticipantsDrawManager(file_path, with_weights,
+                                                               draw_counter) as drawings, prizes_manager.PrizeManager(
+        prizes_templates.get_separate_prizes_template()) as prizes:
         interface.show_winners(drawings, file_path, prizes)
 
 
