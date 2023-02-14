@@ -10,7 +10,7 @@
 
 import click
 
-from draw import participants_drawings_manager
+from draw import participants_drawings_manager, winners
 from interface import interface
 from prizes import prizes_manager, prizes_templates
 from utils import file_utils
@@ -23,9 +23,14 @@ from utils import file_utils
               help='The format of participants file')
 @click.option('--times', '-t', default=1, help='Times of drawing')
 @click.option('--lottery_template', '-lt', help='The lottery template')
-@click.option('--output', '-o', help='The output file')
+@click.option('--output', '-o', type=click.File('w'), help='The output file')
 def parse_command(participants, weights, ftype, times, lottery_template, output):
-    draw(participants, weights, ftype, times, lottery_template)
+    results = draw(participants, weights, ftype, times, lottery_template)
+
+    if output:
+        output.write(file_utils.as_json(results))
+    else:
+        interface.show_winners(results)
 
 
 def draw(participants_file, with_weights, ftype, draw_counter, lottery_template):
@@ -35,7 +40,7 @@ def draw(participants_file, with_weights, ftype, draw_counter, lottery_template)
                                                                draw_counter,
                                                                ftype) as drawings, prizes_manager.PrizeManager(
         prizes_templates.get_separate_prizes_template(lottery_template)) as prizes:
-        interface.show_winners(drawings, file_path, prizes)
+        return winners.get_winners(drawings, file_path, prizes)
 
 
 if __name__ == '__main__':
