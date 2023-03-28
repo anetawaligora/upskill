@@ -16,38 +16,40 @@ class ParticipantParser(object):
         self.ftype = ftype
 
     def __enter__(self):
+        return self.parse()
+
+    def parse(self):
+        participants = []
         if self.ftype == 'json':
-            participants = ParticipantParser.parse_json(self.file_obj, self.with_weights)
+            participants = self.parse_json()
 
         elif self.ftype == 'csv':
-            participants = ParticipantParser.parse_csv(self.file_obj, self.with_weights)
+            participants = self.parse_csv()
 
         return participants
 
     def __exit__(self, type, value, traceback):
         self.file_obj.close()
 
-    @staticmethod
-    def parse_json(file, with_weights=False) -> List[Participant]:
+    def parse_json(self) -> List[Participant]:
         participants = list()
-        for item in json.load(file):
+        for item in json.load(self.file_obj):
             if isinstance(item, dict):
                 participant = Participant(item['id'], item['first_name'], item['last_name'],
-                                          item['weight']) if with_weights else Participant(item['id'],
-                                                                                           item['first_name'],
-                                                                                           item['last_name'],
-                                                                                           item['weight'])
+                                          item['weight']) if self.with_weights else Participant(item['id'],
+                                                                                                item['first_name'],
+                                                                                                item['last_name'],
+                                                                                                item['weight'])
                 participants.append(participant)
 
         return participants
 
-    @staticmethod
-    def parse_csv(file, with_weights) -> List[Participant]:
-        participants_reader = csv.reader(file, delimiter=',', quotechar='|')
+    def parse_csv(self) -> List[Participant]:
+        participants_reader = csv.reader(self.file_obj, delimiter=',', quotechar='|')
         participants = list()
         for item in list(participants_reader)[1:]:
             participant = Participant(item[0], item[1], item[2],
-                                      item[3]) if with_weights else Participant(item[0], item[1], item[2])
+                                      item[3]) if self.with_weights else Participant(item[0], item[1], item[2])
             participants.append(participant)
 
         return participants

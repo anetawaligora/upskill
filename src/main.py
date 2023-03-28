@@ -10,12 +10,11 @@
 
 import click
 
-from participants.participant_draw_manager import ParticipantDrawManager
 from interface import interface
-from participants.participant_parser import ParticipantParser
-from prizes.prizes_manager import PrizeManager
-from utils import file_utils
 from lottery.lottery import Lottery
+from participants.participant_parser import ParticipantParser
+from prizes.prizes_parser import PrizeParser
+from utils import file_utils
 
 
 @click.command()
@@ -27,21 +26,22 @@ from lottery.lottery import Lottery
 @click.option('--lottery_template', '-lt', help='The lottery template')
 @click.option('--output', '-o', type=click.File('w'), help='The output file')
 def parse_command(participants, weights, ftype, times, lottery_template, output):
-    results = draw(participants, weights, ftype, times, lottery_template)
+    winners = draw_winners(participants, weights, ftype, times, lottery_template)
 
     if output:
-        output.write(file_utils.as_json(results))
+        output.write(file_utils.as_json(winners))
     else:
-        interface.show_winners(results)
+        interface.show_winners(winners)
 
 
-def draw(participants_file, with_weights, ftype, draw_counter, lottery_template):
+def draw_winners(participants_file, with_weights, ftype, draw_counter, lottery_template):
     file_path = file_utils.get_participants_file_path(participants_file)
 
-    with ParticipantParser(file_path, with_weights, ftype) as participants, PrizeManager(
+    with ParticipantParser(file_path, with_weights, ftype) as participants, PrizeParser(
             lottery_template) as prizes:
-        drown_participants = ParticipantDrawManager.draw(participants, draw_counter, with_weights)
-        return Lottery.get_winners(drown_participants, prizes)
+        lottery = Lottery(participants, draw_counter, with_weights, prizes)
+        lottery.draw()
+        return lottery.get_winners()
 
 
 if __name__ == '__main__':

@@ -1,19 +1,39 @@
+import sys
+from random import choices
+
+sys.path.append("..")
+
+
 class Lottery(object):
-    @staticmethod
-    def get_winners(drown_participants, prizes=[]):
+
+    def __init__(self, participants, draw_counter, with_weights, prizes):
+        self.participants = participants
+        self.draw_counter = draw_counter
+        self.with_weights = with_weights
+        self.prizes = prizes
+        self.drown_participants = []
+
+    def draw(self):
+        if self.with_weights:
+            weights = [int(participant.weight) for participant in self.participants]
+            self.drown_participants = choices(self.participants, k=self.draw_counter, weights=weights)
+        else:
+            self.drown_participants = choices(self.participants, k=self.draw_counter)
+
+    def get_winners(self):
         winners = []
-        for index, item in enumerate(drown_participants):
-            winners.append(Lottery.get_winner_list(item, index, prizes))
+        prizes_number = len(self.prizes)
+        for index, item in enumerate(self.drown_participants):
+            winner = self.get_winner(item, index, prizes_number)
+            winners.append(winner)
         return winners
 
-    @staticmethod
-    def get_winner_list(item, index, prizes):
+    def get_winner(self, item, index, prizes_number):
         return {"place": index + 1, "first_name": item.first_name, "last_name": item.last_name,
-                "prize": Lottery.get_prize(index, prizes)}
+                "prize": self.get_prize(index, prizes_number)}
 
-    @staticmethod
-    def get_prize(index, prizes):
-        if index >= len(prizes):
+    def get_prize(self, index, prizes_number) -> str:
+        if index >= prizes_number:
             return ''
 
-        return prizes[index]['name']
+        return self.prizes[index].name
