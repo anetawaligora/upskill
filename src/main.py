@@ -1,18 +1,19 @@
 # python mvp.pyFILES = {}
 # load the contents of files into FILES should_draw = Truewhile should_draw:
-# question - from which file to draw
+# question - from which file to lottery
 # question - if there are weights in the file
-# question - how many times to make a draw
+# question - how many times to make a lottery
 # Winners drawing
 # Print the list of winners
-# question - whether to continue draw or end the program
-# if continue to draw --> choose a file and repeat steps , if end program print "End of drawing"
+# question - whether to continue lottery or end the program
+# if continue to lottery --> choose a file and repeat steps , if end program print "End of drawing"
 
 import click
 
-from draw import participants_drawings_manager, winners
 from interface import interface
-from prizes import prizes_manager, prizes_templates
+from lottery.lottery import Lottery
+from participants.participant_parser import ParticipantParser
+from prizes.prizes_parser import PrizeParser
 from utils import file_utils
 
 
@@ -25,22 +26,22 @@ from utils import file_utils
 @click.option('--lottery_template', '-lt', help='The lottery template')
 @click.option('--output', '-o', type=click.File('w'), help='The output file')
 def parse_command(participants, weights, ftype, times, lottery_template, output):
-    results = draw(participants, weights, ftype, times, lottery_template)
+    winners = draw_winners(participants, weights, ftype, times, lottery_template)
 
     if output:
-        output.write(file_utils.as_json(results))
+        output.write(file_utils.as_json(winners))
     else:
-        interface.show_winners(results)
+        interface.show_winners(winners)
 
 
-def draw(participants_file, with_weights, ftype, draw_counter, lottery_template):
+def draw_winners(participants_file, with_weights, ftype, draw_counter, lottery_template):
     file_path = file_utils.get_participants_file_path(participants_file)
 
-    with participants_drawings_manager.ParticipantsDrawManager(file_path, with_weights,
-                                                               draw_counter,
-                                                               ftype) as drawings, prizes_manager.PrizeManager(
-        prizes_templates.get_separate_prizes_template(lottery_template)) as prizes:
-        return winners.get_winners(drawings, file_path, prizes)
+    with ParticipantParser(file_path, with_weights, ftype) as participants, PrizeParser(
+            lottery_template) as prizes:
+        lottery = Lottery(participants, draw_counter, with_weights, prizes)
+        lottery.draw()
+        return lottery.get_winners()
 
 
 if __name__ == '__main__':
