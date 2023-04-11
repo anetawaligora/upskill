@@ -1,7 +1,3 @@
-import sys
-
-sys.path.append("..")
-
 from lottery.lottery import Lottery
 from participants.participant import Participant
 
