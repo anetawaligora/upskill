@@ -11,19 +11,19 @@ class Lottery(object):
         self.draw_counter = draw_counter
         self.with_weights = with_weights
         self.prizes = prizes
-        self.drown_participants = []
+        self.drawn_participants = []
 
     def draw(self):
         if self.with_weights:
             weights = [int(participant.weight) for participant in self.participants]
-            self.drown_participants = choices(self.participants, k=self.draw_counter, weights=weights)
+            self.drawn_participants = choices(self.participants, k=self.draw_counter, weights=weights)
         else:
-            self.drown_participants = choices(self.participants, k=self.draw_counter)
+            self.drawn_participants = choices(self.participants, k=self.draw_counter)
 
     def get_winners(self):
         winners = []
         prizes_number = len(self.prizes)
-        for index, item in enumerate(self.drown_participants):
+        for index, item in enumerate(self.drawn_participants):
             winner = self.get_winner(item, index, prizes_number)
             winners.append(winner)
         return winners
