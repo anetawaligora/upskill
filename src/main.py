@@ -38,7 +38,7 @@ def draw_winners(participants_file, with_weights, ftype, draw_counter, lottery_t
     file_path = file_utils.get_participants_file_path(participants_file)
 
     with ParticipantParser(file_path, with_weights, ftype) as participants, PrizeParser(
-            lottery_template) as prizes:
+            lottery_template, 'src/data/lottery_templates') as prizes:
         lottery = Lottery(participants, draw_counter, with_weights, prizes)
         lottery.draw()
         return lottery.get_winners()

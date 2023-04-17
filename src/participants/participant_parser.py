@@ -36,10 +36,9 @@ class ParticipantParser(object):
         for item in json.load(self.file_obj):
             if isinstance(item, dict):
                 participant = Participant(item['id'], item['first_name'], item['last_name'],
-                                          item['weight']) if self.with_weights else Participant(item['id'],
-                                                                                                item['first_name'],
-                                                                                                item['last_name'],
-                                                                                                item['weight'])
+                                          int(item['weight'])) if self.with_weights else Participant(item['id'],
+                                                                                                     item['first_name'],
+                                                                                                     item['last_name'])
                 participants.append(participant)
 
         return participants
@@ -49,7 +48,7 @@ class ParticipantParser(object):
         participants = list()
         for item in list(participants_reader)[1:]:
             participant = Participant(item[0], item[1], item[2],
-                                      item[3]) if self.with_weights else Participant(item[0], item[1], item[2])
+                                      int(item[3])) if self.with_weights else Participant(item[0], item[1], item[2])
             participants.append(participant)
 
         return participants

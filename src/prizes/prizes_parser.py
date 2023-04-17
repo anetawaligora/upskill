@@ -9,8 +9,9 @@ from prizes.prize import Prize
 
 
 class PrizeParser(object):
-    def __init__(self, file_path):
-        self.file_obj = open(PrizeParser.get_separate_prizes_template(file_path))
+    def __init__(self, file_path, templates_directory):
+        self.templates_directory = templates_directory
+        self.file_obj = open(self.get_separate_prizes_template(file_path))
 
     def __enter__(self):
         return self.parse()
@@ -23,14 +24,14 @@ class PrizeParser(object):
         prizes = []
 
         for item in parsed_json['prizes']:
-            prize = Prize(item['id'], item['name'], item['amount'])
-            prizes.append(prize)
+            prize = Prize(item['id'], item['name'])
+            for prizeIndex in range(int(item['amount'])):
+                prizes.append(prize)
 
         return prizes
 
-    @staticmethod
-    def get_separate_prizes_template(template_file):
-        lottery_templates_directory = Path.joinpath(Path().absolute(), 'src/data/lottery_templates')
+    def get_separate_prizes_template(self, template_file):
+        lottery_templates_directory = Path.joinpath(Path().absolute(), self.templates_directory)
 
         if template_file:
             return Path.joinpath(lottery_templates_directory, template_file)
