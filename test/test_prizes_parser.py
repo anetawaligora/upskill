@@ -6,7 +6,7 @@ sys.path.append("../src")
 from prizes.prizes_parser import PrizeParser
 
 
-class PrizesParserTest(unittest.TestCase):
+class TestPrizesParser(unittest.TestCase):
     def test_parse_prize_template_with_specified_template_name(self):
         with PrizeParser('separate_prizes.json', 'test_data/lottery_templates') as prizes:
             self.assertEqual(len(prizes), 3)

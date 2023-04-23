@@ -8,7 +8,7 @@ from participants.participant_parser import ParticipantParser
 from prizes.prizes_parser import PrizeParser
 
 
-class LotteryTest(unittest.TestCase):
+class TestLottery(unittest.TestCase):
 
     def test_get_winners_before_draw(self):
         lottery = self.prepareLottery('separate_prizes.json', 5)
